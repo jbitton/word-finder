@@ -1,28 +1,59 @@
+// @flow
 import React, { Component } from 'react';
-import Board from './Board';
+import { Layout, Breadcrumb } from 'antd';
+import Game from './Game';
+import AppBar from './AppBar';
 
-type State = {
-  boardSize: number,
-  letters: Array<Array<string>>
+import type { configStateType } from '../reducers/types';
+
+const { Content, Footer } = Layout;
+
+const styles = {
+  content: {
+    padding: '0 50px',
+    marginTop: 64
+  },
+  breadcrumb: {
+    margin: '16px 0'
+  },
+  footer: {
+    textAlign: 'center'
+  }
 };
 
-class App extends Component<State> {
-  state: State = {
-    boardSize: 5,
-    letters: [
-      ['A', 'B', 'C', 'D', 'E'],
-      ['F', 'G', 'H', 'I', 'J'],
-      ['K', 'L', 'M', 'N', 'O'],
-      ['P', 'Q', 'R', 'S', 'T'],
-      ['U', 'V', 'W', 'X', 'Y']
-    ]
-  }
+type Props = {
+  setNewick: (fileName: string) => void,
+  setPBS: (fileName: string) => void,
+  setGeneToGo: (fileName: string) => void,
+  setGoAnnotation: (fileName: string) => void,
+  setSpecies: (fileName: string) => void,
+  setGeneInfo: (fileName: string) => void,
+  setProteinAlignments: (fileName: string) => void,
+  setTermType: (termType: string) => void,
+  setMeasureType: (measureType: string) => void,
+  config: configStateType
+};
+
+export default class Home extends Component<Props> {
+  props: Props;
 
   render() {
     return (
-      <Board letters={this.state.letters} />
+      <div>
+        <Layout style={{height: '100vh'}}>
+          <AppBar />
+          <Content style={styles.content}>
+            <Breadcrumb style={styles.breadcrumb}>
+              <Breadcrumb.Item>Home</Breadcrumb.Item>
+              <Breadcrumb.Item>Setup</Breadcrumb.Item>
+            </Breadcrumb>
+            <Game/>
+          </Content>
+          <Footer style={styles.footer}>
+            Word Finder ©2018 Created by Joanna Bitton
+          </Footer>
+        </Layout>
+      </div>
     );
   }
 }
-
-export default App;
