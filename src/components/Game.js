@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import Board from './Board';
 
+type Props = {
+  boardSize: number
+};
+
 type State = {
   letters: Array<Array<string>>
 };
 
-class App extends Component<State> {
+class App extends Component<Props, State> {
   state: State = {
-    letters: [...Array(5).keys()].map(() => (
-      [...Array(5).keys()].map(() => this.generateRandomLetter())
+    letters: [...Array(this.props.boardSize).keys()].map(() => (
+      [...Array(this.props.boardSize).keys()].map(() => this.generateRandomLetter())
     ))
   }
 
@@ -18,8 +22,11 @@ class App extends Component<State> {
   }
 
   render() {
+    const { boardSize } = this.props;
     return (
-      <Board letters={this.state.letters} />
+      <div>
+        <Board letters={this.state.letters} boardSize={boardSize} />
+      </div>
     );
   }
 }

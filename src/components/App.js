@@ -1,8 +1,9 @@
 // @flow
 import React, { Component } from 'react';
-import { Layout, Breadcrumb } from 'antd';
+import { Layout } from 'antd';
 import Game from './Game';
 import AppBar from './AppBar';
+import WelcomeCard from './WelcomeCard';
 
 import type { configStateType } from '../reducers/types';
 
@@ -12,9 +13,6 @@ const styles = {
   content: {
     padding: '0 50px',
     marginTop: 64
-  },
-  breadcrumb: {
-    margin: '16px 0'
   },
   footer: {
     textAlign: 'center'
@@ -34,20 +32,45 @@ type Props = {
   config: configStateType
 };
 
-export default class Home extends Component<Props> {
+type State = {
+  boardSize: number;
+}
+
+export default class Home extends Component<Props, State> {
   props: Props;
 
+  state: State = {
+    boardSize: 4,
+    isBoardSizeSet: false,
+  }
+
+  constructor() {
+    super();
+    this.setBoardSize = this.setBoardSize.bind(this);
+    this.onSizeSubmit = this.onSizeSubmit.bind(this);
+  }
+
+  setBoardSize(boardSize: number) {
+    this.setState({ boardSize });
+  }
+
+  onSizeSubmit() {
+    this.setState({ isBoardSizeSet: true });
+  }
+
   render() {
+    const { boardSize, isBoardSizeSet } = this.state;
     return (
       <div>
         <Layout style={{height: '100vh'}}>
           <AppBar />
           <Content style={styles.content}>
-            <Breadcrumb style={styles.breadcrumb}>
-              <Breadcrumb.Item>Home</Breadcrumb.Item>
-              <Breadcrumb.Item>Setup</Breadcrumb.Item>
-            </Breadcrumb>
-            <Game/>
+            {isBoardSizeSet
+              ? <Game boardSize={boardSize}/>
+              : <WelcomeCard
+                  setBoardSize={this.setBoardSize}
+                  onSizeSubmit={this.onSizeSubmit}
+                />}
           </Content>
           <Footer style={styles.footer}>
             Word Finder ©2018 Created by Joanna Bitton

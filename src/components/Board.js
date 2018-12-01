@@ -10,13 +10,13 @@ const Board = (props: Props) => {
   const { letters } = props;
 
   return (
-    <div class="box">
-      {letters.map(row => (
-        <div class="row">
-          {row.map(letter => (
-            <div class="tile">
-              <span class="letter">{letter}</span>
-              <span class="value">{letterValues[letter]}</span>
+    <div className="box">
+      {letters.map((row, idx) => (
+        <div className="row" key={idx}>
+          {row.map((letter, idx) => (
+            <div className="tile" key={idx}>
+              <span className="letter">{letter}</span>
+              <span className="value">{letterValues[letter]}</span>
             </div>
           ))}
         </div>
