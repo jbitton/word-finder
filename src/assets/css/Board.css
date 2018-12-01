@@ -1,0 +1,36 @@
+.box {
+  display: flex;
+  flex-direction: column;
+  font-family: sans-serif;
+}
+
+.row {
+  display: flex;
+}
+
+.tile {
+  height: 50px;
+  width: 50px;
+  background-color: #ddb033;
+  border-radius: 20%;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 50px;
+  box-shadow: 1px 1px #ae881e;
+  margin-right: 3px;
+  margin-bottom: 3px;
+}
+
+.letter {
+  font-size: 40px;
+  display: inline-block;
+  position: relative;
+  left: 4%;
+}
+
+.value {
+  font-size: 8px;
+  position: relative;
+  right: -4%;
+  bottom: -5%;
+}

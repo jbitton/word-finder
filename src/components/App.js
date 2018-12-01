@@ -1,23 +1,26 @@
 import React, { Component } from 'react';
+import Board from './Board';
 
-class App extends Component {
+type State = {
+  boardSize: number,
+  letters: Array<Array<string>>
+};
+
+class App extends Component<State> {
+  state: State = {
+    boardSize: 5,
+    letters: [
+      ['A', 'B', 'C', 'D', 'E'],
+      ['F', 'G', 'H', 'I', 'J'],
+      ['K', 'L', 'M', 'N', 'O'],
+      ['P', 'Q', 'R', 'S', 'T'],
+      ['U', 'V', 'W', 'X', 'Y']
+    ]
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Board letters={this.state.letters} />
     );
   }
 }
