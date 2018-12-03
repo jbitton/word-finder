@@ -4,10 +4,10 @@
   "private": true,
   "dependencies": {
     "antd": "^3.10.9",
-    "check-word": "^1.1.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-scripts": "2.1.1"
+    "react-scripts": "2.1.1",
+    "spelling": "^2.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

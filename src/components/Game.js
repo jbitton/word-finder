@@ -24,9 +24,7 @@ class App extends Component<Props, State> {
   render() {
     const { boardSize } = this.props;
     return (
-      <div>
-        <Board letters={this.state.letters} boardSize={boardSize} />
-      </div>
+      <Board letters={this.state.letters} boardSize={boardSize} />
     );
   }
 }

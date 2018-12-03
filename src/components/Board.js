@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import { Button } from 'antd';
 import letterValues from '../assets/data/letterValues.json';
+import spelling from 'spelling';
+import dictionary from 'spelling/dictionaries/en_US';
 import '../assets/css/Board.css';
+
+const words = new spelling(dictionary);
 
 type Props = {
   letters: Array<Array<string>>
@@ -14,6 +19,11 @@ class Board extends Component<Props, State> {
   state: State = {
     selectedLetters: [],
     similarIdx: -1
+  }
+
+  constructor(props) {
+    super(props);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   getSimilarIndexFirst(idx1, idx2) {
@@ -127,7 +137,30 @@ class Board extends Component<Props, State> {
     this.setState({ selectedLetters });
   }
 
+  onSubmit() {
+    const { selectedLetters } = this.state;
+    const { letters } = this.props;
+    let proposedWord = '';
+
+    selectedLetters.forEach(idxs => {
+      proposedWord += letters[idxs[0]][idxs[1]]
+    });
+
+    const isWord = words.lookup(proposedWord).found;
+
+    if (isWord) {
+      // increment score
+      // remove letters in words from board
+      // clear selectedLetters
+      alert('yay')
+    } else {
+      this.setState({ selectedLetters: []});
+      alert('Error: You submitted an invalid word')
+    }
+  }
+
   render() {
+    const { selectedLetters } = this.state;
     const { letters } = this.props;
 
     return (
@@ -151,6 +184,15 @@ class Board extends Component<Props, State> {
             ))}
           </div>
         ))}
+        {selectedLetters.length
+          ? <Button
+              icon="right-square"
+              onClick={this.onSubmit}
+              type="primary"
+            >
+              Submit Word
+            </Button>
+          : null}
       </div>
     );
   }
