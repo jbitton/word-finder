@@ -9,11 +9,16 @@ type State = {
   letters: Array<Array<string>>
 };
 
-class App extends Component<Props, State> {
+class Game extends Component<Props, State> {
   state: State = {
     letters: [...Array(this.props.boardSize).keys()].map(() => (
       [...Array(this.props.boardSize).keys()].map(() => this.generateRandomLetter())
     ))
+  }
+
+  constructor(props: Props) {
+    super(props);
+    this.fillLetters = this.fillLetters.bind(this);
   }
 
   generateRandomLetter() {
@@ -21,12 +26,26 @@ class App extends Component<Props, State> {
     return alphabet[Math.floor(Math.random() * alphabet.length)]
   }
 
+  fillLetters(selectedLetters: Array<Array<number>>) {
+    const { letters } = this.state;
+
+    selectedLetters.forEach(idxs => {
+      letters[idxs[0]][idxs[1]] = this.generateRandomLetter();
+    });
+
+    this.setState({ letters });
+  }
+
   render() {
     const { boardSize } = this.props;
     return (
-      <Board letters={this.state.letters} boardSize={boardSize} />
+      <Board
+        boardSize={boardSize}
+        fillLetters={this.fillLetters}
+        letters={this.state.letters}
+      />
     );
   }
 }
 
-export default App;
+export default Game;

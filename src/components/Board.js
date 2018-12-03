@@ -8,7 +8,8 @@ import '../assets/css/Board.css';
 const words = new spelling(dictionary);
 
 type Props = {
-  letters: Array<Array<string>>
+  letters: Array<Array<string>>,
+  fillLetters: (selectedLetters: Array<Array<number>>) => void
 };
 
 type State = {
@@ -21,12 +22,12 @@ class Board extends Component<Props, State> {
     similarIdx: -1
   }
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  getSimilarIndexFirst(idx1, idx2) {
+  getSimilarIndexFirst(idx1: number, idx2: number) {
     const { selectedLetters } = this.state;
 
     if (
@@ -46,7 +47,7 @@ class Board extends Component<Props, State> {
     return -1;
   }
 
-  getSimilarIndexLast(idx1, idx2) {
+  getSimilarIndexLast(idx1: number, idx2: number) {
     const { selectedLetters } = this.state;
     const lastIdx = selectedLetters.length - 1;
 
@@ -67,7 +68,7 @@ class Board extends Component<Props, State> {
     return -1;
   }
 
-  containsIndex(idx1, idx2) {
+  containsIndex(idx1: number, idx2: number) {
     const { selectedLetters } = this.state;
     let indexFound = -1;
 
@@ -80,7 +81,7 @@ class Board extends Component<Props, State> {
     return indexFound;
   }
 
-  onLetterClick(idx1, idx2, letter) {
+  onLetterClick(idx1: number, idx2: number) {
     const { selectedLetters, similarIdx } = this.state;
 
     const index = this.containsIndex(idx1, idx2);
@@ -149,13 +150,14 @@ class Board extends Component<Props, State> {
     const isWord = words.lookup(proposedWord).found;
 
     if (isWord) {
-      // increment score
-      // remove letters in words from board
-      // clear selectedLetters
-      alert('yay')
+      let score = 0;
+      [...proposedWord].forEach(letter => score += letterValues[letter]);
+      this.props.fillLetters(selectedLetters);
+      this.setState({ selectedLetters: [], similarIdx: -1});
+      alert(`Congratulations! You found a ${score} point word`);
     } else {
-      this.setState({ selectedLetters: []});
-      alert('Error: You submitted an invalid word')
+      this.setState({ selectedLetters: [], similarIdx: -1});
+      alert('Error: You submitted an invalid word');
     }
   }
 
@@ -171,7 +173,7 @@ class Board extends Component<Props, State> {
               <div
                 className="tile"
                 key={idx2}
-                onClick={() => this.onLetterClick(idx1, idx2, letter)}
+                onClick={() => this.onLetterClick(idx1, idx2)}
                 style={
                   this.containsIndex(idx1, idx2) === -1
                   ? {}
