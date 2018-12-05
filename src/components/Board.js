@@ -12,6 +12,7 @@ type Props = {
   fillLetters: (selectedLetters: Array<Array<number>>) => void,
   mode: 'action' | 'modal' | 'word',
   performAction: (idx1, idx2) => void,
+  returnToAction: () => void
 };
 
 type State = {
@@ -157,7 +158,7 @@ class Board extends Component<Props, State> {
 
   onSubmit() {
     const { selectedLetters } = this.state;
-    const { letters } = this.props;
+    const { letters, returnToAction } = this.props;
     let proposedWord = '';
 
     selectedLetters.forEach(idxs => {
@@ -172,6 +173,7 @@ class Board extends Component<Props, State> {
       this.props.fillLetters(selectedLetters);
       this.setState({ selectedLetters: [], similarIdx: -1});
       alert(`Congratulations! You found a ${score} point word`);
+      returnToAction();
     } else {
       this.setState({ selectedLetters: [], similarIdx: -1});
       alert('Error: You submitted an invalid word');

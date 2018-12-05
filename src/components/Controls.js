@@ -2,7 +2,9 @@ import React from 'react';
 import { Button, Card, Divider } from 'antd';
 
 type Props = {
-  onControlSelected: (command: string) => void
+  mode: 'action' | 'modal' | 'word',
+  onControlSelected: (command: string) => void,
+  onSkipWord: () => void
 };
 
 const Controls = (props: Props) => (
@@ -17,10 +19,13 @@ const Controls = (props: Props) => (
       transform: 'translate(-50%, -50%)'
     }}
   >
-    <Divider orientation="left">Select an Action</Divider>
+    <Divider orientation="left">
+      {props.mode === 'action' ? 'Select an Action' : 'Select a Word'}
+    </Divider>
     <Button
       type="primary"
       icon="arrow-up"
+      disabled={props.mode !== 'action'}
       onClick={() => props.onControlSelected('up')}
       style={{marginBottom: '10px', width: '150px'}}
     >
@@ -29,6 +34,7 @@ const Controls = (props: Props) => (
     <Button
       type="primary"
       icon="arrow-down"
+      disabled={props.mode !== 'action'}
       onClick={() => props.onControlSelected('down')}
       style={{marginBottom: '10px', width: '150px'}}
     >
@@ -37,6 +43,7 @@ const Controls = (props: Props) => (
     <Button
       type="primary"
       icon="arrow-left"
+      disabled={props.mode !== 'action'}
       onClick={() => props.onControlSelected('left')}
       style={{marginBottom: '10px', width: '150px'}}
     >
@@ -45,6 +52,7 @@ const Controls = (props: Props) => (
     <Button
       type="primary"
       icon="arrow-right"
+      disabled={props.mode !== 'action'}
       onClick={() => props.onControlSelected('right')}
       style={{marginBottom: '10px', width: '150px'}}
     >
@@ -53,10 +61,20 @@ const Controls = (props: Props) => (
     <Button
       type="primary"
       icon="swap"
+      disabled={props.mode !== 'action'}
       onClick={() => props.onControlSelected('swap')}
       style={{marginBottom: '10px', width: '150px'}}
     >
       Swap Letter
+    </Button>
+    <Button
+      type="primary"
+      icon="fast-forward"
+      disabled={props.mode !== 'word'}
+      onClick={() => props.onSkipWord()}
+      style={{marginBottom: '10px', width: '150px'}}
+    >
+      Skip Word
     </Button>
   </Card>
 );

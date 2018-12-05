@@ -30,6 +30,7 @@ class Game extends Component<Props, State> {
     this.onControlSelected = this.onControlSelected.bind(this);
     this.onCancel = this.onCancel.bind(this);
     this.performAction = this.performAction.bind(this);
+    this.returnToAction = this.returnToAction.bind(this);
   }
 
   generateRandomLetter() {
@@ -45,6 +46,10 @@ class Game extends Component<Props, State> {
     });
 
     this.setState({ letters });
+  }
+
+  returnToAction() {
+    this.setState({mode: 'action'});
   }
 
   onControlSelected(command: string) {
@@ -118,13 +123,18 @@ class Game extends Component<Props, State> {
       )
       : (
         <div>
-          <Controls onControlSelected={this.onControlSelected} />
+          <Controls
+            mode={mode}
+            onControlSelected={this.onControlSelected}
+            onSkipWord={this.returnToAction}
+          />
           <Board
             boardSize={boardSize}
             fillLetters={this.fillLetters}
             letters={this.state.letters}
             mode={mode}
             performAction={this.performAction}
+            returnToAction={this.returnToAction}
           />
         </div>
       );
