@@ -49,8 +49,6 @@ class Game extends Component<Props, State> {
 
   onControlSelected(command: string) {
     this.setState({ currentAction: command, modalVisible: true, mode: 'modal'});
-    // function to show modal to select a letter to perform the command on
-    // another modal to show which letter to swap with
   }
 
   onCancel() {
@@ -58,20 +56,37 @@ class Game extends Component<Props, State> {
   }
 
   performAction(idx1, idx2) {
-    console.log(idx1, idx2);
-    const { currentAction } = this.state;
-    this.setState({ modalVisible: false, mode: 'action'});
+    const { currentAction, letters } = this.state;
+    const { boardSize } = this.props;
+
     if (currentAction === 'up') {
-
+      const temp = letters[0][idx2];
+      for (let i = 1; i < boardSize; i++) {
+        letters[i-1][idx2] = letters[i][idx2];
+      }
+      letters[boardSize-1][idx2] = temp;
     } else if (currentAction === 'down') {
-
+      const temp = letters[boardSize-1][idx2];
+      for (let i = boardSize-2; i > 0; i--) {
+        letters[i+1][idx2] = letters[i][idx2];
+      }
+      letters[0][idx2] = temp;
     } else if (currentAction === 'left') {
-
+      const temp = letters[idx1][0];
+      for (let i = 1; i < boardSize; i++) {
+        letters[idx1][i-1] = letters[idx1][i];
+      }
+      letters[idx1][boardSize-1] = temp;
     } else if (currentAction === 'right') {
-
+      const temp = letters[idx1][boardSize-1];
+      for (let i = boardSize-2; i > 0; i--) {
+        letters[idx1][i+1] = letters[idx1][i];
+      }
+      letters[idx1][0] = temp;
     } else if (currentAction === 'swap') {
 
     }
+    this.setState({ letters: letters, modalVisible: false, mode: 'word'});
   }
 
 
