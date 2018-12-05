@@ -67,7 +67,7 @@ class Game extends Component<Props, State> {
       letters[boardSize-1][idx2] = temp;
     } else if (currentAction === 'down') {
       const temp = letters[boardSize-1][idx2];
-      for (let i = boardSize-2; i > 0; i--) {
+      for (let i = boardSize-2; i >= 0; i--) {
         letters[i+1][idx2] = letters[i][idx2];
       }
       letters[0][idx2] = temp;
@@ -79,7 +79,7 @@ class Game extends Component<Props, State> {
       letters[idx1][boardSize-1] = temp;
     } else if (currentAction === 'right') {
       const temp = letters[idx1][boardSize-1];
-      for (let i = boardSize-2; i > 0; i--) {
+      for (let i = boardSize-2; i >= 0; i--) {
         letters[idx1][i+1] = letters[idx1][i];
       }
       letters[idx1][0] = temp;
