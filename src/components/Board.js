@@ -216,10 +216,13 @@ class Board extends Component<Props, State> {
           : selectedLetters.length && mode === 'modal'
             ? <Button
                 icon="right-square"
-                onClick={() => this.props.performAction(
-                  selectedLetters[0][0],
-                  selectedLetters[0][1]
-                )}
+                onClick={() => {
+                  this.setState({ selectedLetters: [] });
+                  this.props.performAction(
+                    selectedLetters[0][0],
+                    selectedLetters[0][1]
+                  );
+                }}
                 type="primary"
               >
                 Submit Letter

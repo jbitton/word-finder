@@ -11,8 +11,20 @@ type State = {
   letters: Array<Array<string>>,
   currentAction: string,
   mode: 'action' | 'modal' | 'word',
-  modalVisible: boolean
+  modalVisible: boolean,
+  showAlphabetBoard: boolean,
+  swapIdxs: Array<number>
 };
+
+const ALPHABET_BOARD = [
+  ['A', 'B', 'C', 'D'],
+  ['E', 'F', 'G', 'H'],
+  ['I', 'J', 'K', 'L'],
+  ['M', 'N', 'O', 'P'],
+  ['Q', 'R', 'S', 'T'],
+  ['U', 'V', 'W', 'X'],
+  ['Y', 'Z']
+];
 
 class Game extends Component<Props, State> {
   state: State = {
@@ -21,7 +33,9 @@ class Game extends Component<Props, State> {
     )),
     currentAction: '',
     mode: 'action',
-    modalVisible: false
+    modalVisible: false,
+    showAlphabetBoard: false,
+    swapIdxs: []
   }
 
   constructor(props: Props) {
@@ -31,6 +45,7 @@ class Game extends Component<Props, State> {
     this.onCancel = this.onCancel.bind(this);
     this.performAction = this.performAction.bind(this);
     this.returnToAction = this.returnToAction.bind(this);
+    this.swapLetters = this.swapLetters.bind(this);
   }
 
   generateRandomLetter() {
@@ -89,15 +104,22 @@ class Game extends Component<Props, State> {
       }
       letters[idx1][0] = temp;
     } else if (currentAction === 'swap') {
-
+      this.setState({showAlphabetBoard: true, swapIdxs: [idx1, idx2]});
+      return;
     }
+    this.setState({ letters: letters, modalVisible: false, mode: 'word'});
+  }
+
+  swapLetters(idx1, idx2) {
+    const { letters, swapIdxs } = this.state;
+    letters[swapIdxs[0]][swapIdxs[1]] = ALPHABET_BOARD[idx1][idx2];
     this.setState({ letters: letters, modalVisible: false, mode: 'word'});
   }
 
 
   render() {
     const { boardSize } = this.props;
-    const { modalVisible, mode } = this.state;
+    const { modalVisible, mode, showAlphabetBoard } = this.state;
 
     return modalVisible
       ? (
@@ -107,18 +129,32 @@ class Game extends Component<Props, State> {
           onCancel={this.onCancel}
           footer={null}
           style={{
-            height: `${60 * boardSize + 50}px`,
-            minWidth: `${50 * boardSize + 50}px`,
-            maxWidth: `${50 * boardSize + 50}px`
+            height: `${showAlphabetBoard ? 470 : 60 * boardSize + 50}px`,
+            minWidth: `${showAlphabetBoard ? 250 : 50 * boardSize + 50}px`,
+            maxWidth: `${showAlphabetBoard ? 250 : 50 * boardSize + 50}px`
           }}
         >
-          <Board
-            boardSize={boardSize}
-            fillLetters={this.fillLetters}
-            letters={this.state.letters}
-            mode={mode}
-            performAction={this.performAction}
-          />
+          {
+            showAlphabetBoard
+              ? (
+                <Board
+                  boardSize={boardSize}
+                  fillLetters={this.fillLetters}
+                  letters={ALPHABET_BOARD}
+                  mode={mode}
+                  performAction={this.swapLetters}
+                />
+              )
+              : (
+                <Board
+                  boardSize={boardSize}
+                  fillLetters={this.fillLetters}
+                  letters={this.state.letters}
+                  mode={mode}
+                  performAction={this.performAction}
+                />
+              )
+          }
         </Modal>
       )
       : (
