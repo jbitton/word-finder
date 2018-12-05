@@ -9,7 +9,9 @@ const words = new spelling(dictionary);
 
 type Props = {
   letters: Array<Array<string>>,
-  fillLetters: (selectedLetters: Array<Array<number>>) => void
+  fillLetters: (selectedLetters: Array<Array<number>>) => void,
+  mode: 'action' | 'modal' | 'word',
+  performAction: (idx1, idx2) => void,
 };
 
 type State = {
@@ -83,6 +85,12 @@ class Board extends Component<Props, State> {
 
   onLetterClick(idx1: number, idx2: number) {
     const { selectedLetters, similarIdx } = this.state;
+    const { mode } = this.props;
+
+    if (mode === 'action') {
+      alert('Error: Please select an action first');
+      return;
+    }
 
     const index = this.containsIndex(idx1, idx2);
 
@@ -99,6 +107,15 @@ class Board extends Component<Props, State> {
         this.setState({similarIdx: -1});
       }
       this.setState({ selectedLetters });
+      return;
+    }
+
+    if (mode === 'modal' && selectedLetters.length === 0) {
+      selectedLetters.push([idx1, idx2]);
+      this.setState({ selectedLetters });
+      return;
+    } else if (mode === 'modal') {
+      alert('Error: Cannot select more than one letter');
       return;
     }
 
@@ -163,10 +180,10 @@ class Board extends Component<Props, State> {
 
   render() {
     const { selectedLetters } = this.state;
-    const { letters } = this.props;
+    const { letters, mode } = this.props;
 
     return (
-      <div className="box">
+      <div className={`box-${mode}`}>
         {letters.map((row, idx1) => (
           <div className="row" key={idx1}>
             {row.map((letter, idx2) => (
@@ -186,7 +203,7 @@ class Board extends Component<Props, State> {
             ))}
           </div>
         ))}
-        {selectedLetters.length
+        {selectedLetters.length && mode === 'word'
           ? <Button
               icon="right-square"
               onClick={this.onSubmit}
@@ -194,7 +211,18 @@ class Board extends Component<Props, State> {
             >
               Submit Word
             </Button>
-          : null}
+          : selectedLetters.length && mode === 'modal'
+            ? <Button
+                icon="right-square"
+                onClick={() => this.props.performAction(
+                  selectedLetters[0][0],
+                  selectedLetters[0][1]
+                )}
+                type="primary"
+              >
+                Submit Letter
+              </Button>
+            : null}
       </div>
     );
   }

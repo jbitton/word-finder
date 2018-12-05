@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Modal } from 'antd';
 import Controls from './Controls';
 import Board from './Board';
 
@@ -8,7 +9,9 @@ type Props = {
 
 type State = {
   letters: Array<Array<string>>,
-  currentAction: string
+  currentAction: string,
+  mode: 'action' | 'modal' | 'word',
+  modalVisible: boolean
 };
 
 class Game extends Component<Props, State> {
@@ -16,12 +19,17 @@ class Game extends Component<Props, State> {
     letters: [...Array(this.props.boardSize).keys()].map(() => (
       [...Array(this.props.boardSize).keys()].map(() => this.generateRandomLetter())
     )),
-    currentAction: ''
+    currentAction: '',
+    mode: 'action',
+    modalVisible: false
   }
 
   constructor(props: Props) {
     super(props);
     this.fillLetters = this.fillLetters.bind(this);
+    this.onControlSelected = this.onControlSelected.bind(this);
+    this.onCancel = this.onCancel.bind(this);
+    this.performAction = this.performAction.bind(this);
   }
 
   generateRandomLetter() {
@@ -40,13 +48,19 @@ class Game extends Component<Props, State> {
   }
 
   onControlSelected(command: string) {
-    this.setState({ currentAction: command });
+    this.setState({ currentAction: command, modalVisible: true, mode: 'modal'});
     // function to show modal to select a letter to perform the command on
     // another modal to show which letter to swap with
   }
 
+  onCancel() {
+    this.setState({ modalVisible: false, mode: 'action'});
+  }
+
   performAction(idx1, idx2) {
+    console.log(idx1, idx2);
     const { currentAction } = this.state;
+    this.setState({ modalVisible: false, mode: 'action'});
     if (currentAction === 'up') {
 
     } else if (currentAction === 'down') {
@@ -63,16 +77,41 @@ class Game extends Component<Props, State> {
 
   render() {
     const { boardSize } = this.props;
-    return (
-      <div>
-        <Controls onControlSelected={this.onControlSelected} />
-        <Board
-          boardSize={boardSize}
-          fillLetters={this.fillLetters}
-          letters={this.state.letters}
-        />
-      </div>
-    );
+    const { modalVisible, mode } = this.state;
+
+    return modalVisible
+      ? (
+        <Modal
+          title="Please Select a Letter to Perform the Action"
+          visible={true}
+          onCancel={this.onCancel}
+          footer={null}
+          style={{
+            minHeight: `${60 * boardSize + 50}px`,
+            minWidth: `${60 * boardSize}px`
+          }}
+        >
+          <Board
+            boardSize={boardSize}
+            fillLetters={this.fillLetters}
+            letters={this.state.letters}
+            mode={mode}
+            performAction={this.performAction}
+          />
+        </Modal>
+      )
+      : (
+        <div>
+          <Controls onControlSelected={this.onControlSelected} />
+          <Board
+            boardSize={boardSize}
+            fillLetters={this.fillLetters}
+            letters={this.state.letters}
+            mode={mode}
+            performAction={this.performAction}
+          />
+        </div>
+      );
   }
 }
 
