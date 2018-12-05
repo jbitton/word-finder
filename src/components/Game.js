@@ -102,8 +102,9 @@ class Game extends Component<Props, State> {
           onCancel={this.onCancel}
           footer={null}
           style={{
-            minHeight: `${60 * boardSize + 50}px`,
-            minWidth: `${60 * boardSize}px`
+            height: `${60 * boardSize + 50}px`,
+            minWidth: `${50 * boardSize + 50}px`,
+            maxWidth: `${50 * boardSize + 50}px`
           }}
         >
           <Board
