@@ -33,7 +33,9 @@ type Props = {
 };
 
 type State = {
-  boardSize: number;
+  boardSize: number,
+  numPlayers: number,
+  numRounds: number,
 }
 
 export default class Home extends Component<Props, State> {
@@ -41,17 +43,29 @@ export default class Home extends Component<Props, State> {
 
   state: State = {
     boardSize: 4,
+    numPlayers: 2,
+    numRounds: 5,
     isBoardSizeSet: false,
   }
 
   constructor() {
     super();
     this.setBoardSize = this.setBoardSize.bind(this);
+    this.setNumPlayers = this.setNumPlayers.bind(this);
+    this.setNumRounds = this.setNumRounds.bind(this);
     this.onSizeSubmit = this.onSizeSubmit.bind(this);
   }
 
   setBoardSize(boardSize: number) {
     this.setState({ boardSize });
+  }
+
+  setNumPlayers(numPlayers: number) {
+    this.setState({ numPlayers });
+  }
+
+  setNumRounds(numRounds: number) {
+    this.setState({ numRounds });
   }
 
   onSizeSubmit() {
@@ -69,6 +83,8 @@ export default class Home extends Component<Props, State> {
               ? <Game boardSize={boardSize}/>
               : <WelcomeCard
                   setBoardSize={this.setBoardSize}
+                  setNumPlayers={this.setNumPlayers}
+                  setNumRounds={this.setNumRounds}
                   onSizeSubmit={this.onSizeSubmit}
                 />}
           </Content>
