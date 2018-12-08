@@ -10,14 +10,15 @@ const words = new spelling(dictionary);
 
 type Props = {
   letters: Array<Array<string>>,
+  mode: 'action' | 'swap' | 'word',
   fillLetters: (selectedLetters: Array<Array<number>>) => void,
-  mode: 'action' | 'word',
   performAction: (currentAction: string, idx1: number, idx2: number) => void,
   returnToAction: () => void
 };
 
 type State = {
-  selectedLetters: Array<Array<number>>
+  selectedLetters: Array<Array<number>>,
+  similarIdx: number
 };
 
 class Board extends Component<Props, State> {
@@ -108,11 +109,11 @@ class Board extends Component<Props, State> {
       return;
     }
 
-    if (mode === 'action' && selectedLetters.length === 0) {
+    if ((mode === 'action' || mode === 'swap') && selectedLetters.length === 0) {
       selectedLetters.push([idx1, idx2]);
       this.setState({ selectedLetters });
       return;
-    } else if (mode === 'action') {
+    } else if (mode === 'action' || mode === 'swap') {
       alert('Error: Cannot select more than one letter');
       return;
     }

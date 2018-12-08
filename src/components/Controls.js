@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Card, Divider } from 'antd';
 
 type Props = {
-  mode: 'action' | 'word',
+  mode: 'action' | 'swap' | 'word',
   selectedLetters: Array<Array<number>>,
   onControlSelected: (command: string) => void,
   onSkipWord: () => void,
@@ -30,7 +30,11 @@ const Controls = (props: Props) => (
     style={styles.card}
   >
     <Divider orientation="left">
-      {props.mode === 'action' ? 'Select an Action' : 'Select a Word'}
+      {props.mode === 'action'
+        ? 'Select an Action'
+        : props.mode === 'swap'
+          ? 'Select a Letter'
+          : 'Select a Word'}
     </Divider>
     <Button
       type="primary"
@@ -71,7 +75,7 @@ const Controls = (props: Props) => (
     <Button
       type="primary"
       icon="swap"
-      disabled={props.mode !== 'action'}
+      disabled={props.mode !== 'action' && props.mode !== 'swap'}
       onClick={() => props.performAction('swap')}
       style={styles.button}
     >
