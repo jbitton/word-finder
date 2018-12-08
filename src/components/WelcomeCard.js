@@ -8,6 +8,19 @@ type Props = {
   onSizeSubmit: () => void
 };
 
+const styles = {
+  card: {
+    width: '30%',
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+  },
+  input: {
+    width: '100%',
+  }
+}
+
 const WelcomeCard = (props: Props) => (
   <Card
     title="Welcome to Word Finder!"
@@ -15,13 +28,7 @@ const WelcomeCard = (props: Props) => (
     actions={[
       <Button type="primary" onClick={props.onSizeSubmit}>Start Game</Button>
     ]}
-    style={{
-      width: '30%',
-      position: 'fixed',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)'
-    }}
+    style={styles.card}
   >
     <Divider orientation="left">Enter a Board Size (N x N)</Divider>
     <InputNumber
@@ -29,9 +36,7 @@ const WelcomeCard = (props: Props) => (
       max={12}
       defaultValue={4}
       onChange={props.setBoardSize}
-      style={{
-        width: '100%'
-      }}
+      style={styles.input}
     />
     <Divider orientation="left">Enter the Number of Players (up to 4)</Divider>
     <InputNumber
@@ -39,9 +44,7 @@ const WelcomeCard = (props: Props) => (
       max={4}
       defaultValue={2}
       onChange={props.setNumPlayers}
-      style={{
-        width: '100%'
-      }}
+      style={styles.input}
     />
     <Divider orientation="left">Enter the Number of Rounds (up to 100)</Divider>
     <InputNumber
@@ -49,9 +52,7 @@ const WelcomeCard = (props: Props) => (
       max={100}
       defaultValue={5}
       onChange={props.setNumRounds}
-      style={{
-        width: '100%'
-      }}
+      style={styles.input}
     />
   </Card>
 );

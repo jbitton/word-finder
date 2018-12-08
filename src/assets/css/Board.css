@@ -1,4 +1,4 @@
-.box-word, .box-action {
+.box {
   display: flex;
   flex-direction: column;
   font-family: sans-serif;
@@ -6,12 +6,6 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-
-.box-modal {
-  display: flex;
-  flex-direction: column;
-  font-family: sans-serif;
 }
 
 .row {

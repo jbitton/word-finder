@@ -10,12 +10,15 @@ import type { configStateType } from '../reducers/types';
 const { Content, Footer } = Layout;
 
 const styles = {
+  layout: {
+    height: '100vh',
+  },
   content: {
     padding: '0 50px',
-    marginTop: 64
+    marginTop: 64,
   },
   footer: {
-    textAlign: 'center'
+    textAlign: 'center',
   }
 };
 
@@ -76,7 +79,7 @@ export default class Home extends Component<Props, State> {
     const { boardSize, isBoardSizeSet } = this.state;
     return (
       <div>
-        <Layout style={{height: '100vh'}}>
+        <Layout style={styles.layout}>
           <AppBar />
           <Content style={styles.content}>
             {isBoardSizeSet

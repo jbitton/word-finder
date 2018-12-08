@@ -2,22 +2,32 @@ import React from 'react';
 import { Button, Card, Divider } from 'antd';
 
 type Props = {
-  mode: 'action' | 'modal' | 'word',
+  mode: 'action' | 'word',
+  selectedLetters: Array<Array<number>>,
   onControlSelected: (command: string) => void,
-  onSkipWord: () => void
+  onSkipWord: () => void,
+  performAction: (currentAction: string) => void,
+};
+
+const styles = {
+  card: {
+    width: '200px',
+    position: 'fixed',
+    top: '50%',
+    left: '20%',
+    transform: 'translate(-50%, -50%)',
+  },
+  button: {
+    marginBottom: '10px',
+    width: '150px',
+  }
 };
 
 const Controls = (props: Props) => (
   <Card
     title="Actions"
     bordered={false}
-    style={{
-      width: '200px',
-      position: 'fixed',
-      top: '50%',
-      left: '20%',
-      transform: 'translate(-50%, -50%)'
-    }}
+    style={styles.card}
   >
     <Divider orientation="left">
       {props.mode === 'action' ? 'Select an Action' : 'Select a Word'}
@@ -26,8 +36,8 @@ const Controls = (props: Props) => (
       type="primary"
       icon="arrow-up"
       disabled={props.mode !== 'action'}
-      onClick={() => props.onControlSelected('up')}
-      style={{marginBottom: '10px', width: '150px'}}
+      onClick={() => props.performAction('up')}
+      style={styles.button}
     >
       Rotate Up
     </Button>
@@ -35,8 +45,8 @@ const Controls = (props: Props) => (
       type="primary"
       icon="arrow-down"
       disabled={props.mode !== 'action'}
-      onClick={() => props.onControlSelected('down')}
-      style={{marginBottom: '10px', width: '150px'}}
+      onClick={() => props.performAction('down')}
+      style={styles.button}
     >
       Rotate Down
     </Button>
@@ -44,8 +54,8 @@ const Controls = (props: Props) => (
       type="primary"
       icon="arrow-left"
       disabled={props.mode !== 'action'}
-      onClick={() => props.onControlSelected('left')}
-      style={{marginBottom: '10px', width: '150px'}}
+      onClick={() => props.performAction('left')}
+      style={styles.button}
     >
       Rotate Left
     </Button>
@@ -53,8 +63,8 @@ const Controls = (props: Props) => (
       type="primary"
       icon="arrow-right"
       disabled={props.mode !== 'action'}
-      onClick={() => props.onControlSelected('right')}
-      style={{marginBottom: '10px', width: '150px'}}
+      onClick={() => props.performAction('right')}
+      style={styles.button}
     >
       Rotate Right
     </Button>
@@ -62,8 +72,8 @@ const Controls = (props: Props) => (
       type="primary"
       icon="swap"
       disabled={props.mode !== 'action'}
-      onClick={() => props.onControlSelected('swap')}
-      style={{marginBottom: '10px', width: '150px'}}
+      onClick={() => props.performAction('swap')}
+      style={styles.button}
     >
       Swap Letter
     </Button>
@@ -72,7 +82,7 @@ const Controls = (props: Props) => (
       icon="fast-forward"
       disabled={props.mode !== 'word'}
       onClick={() => props.onSkipWord()}
-      style={{marginBottom: '10px', width: '150px'}}
+      style={styles.button}
     >
       Skip Word
     </Button>
