@@ -4,6 +4,7 @@ import Controls from './Controls';
 import letterValues from '../assets/data/letterValues.json';
 import spelling from 'spelling';
 import dictionary from 'spelling/dictionaries/en_US';
+import { containsIndex, getSimilarIndexFirst, getSimilarIndexLast } from '../assets/utils';
 import '../assets/css/Board.css';
 
 const words = new spelling(dictionary);
@@ -33,65 +34,11 @@ class Board extends Component<Props, State> {
     this.performAction = this.performAction.bind(this);
   }
 
-  getSimilarIndexFirst(idx1: number, idx2: number) {
-    const { selectedLetters } = this.state;
-
-    if (
-      selectedLetters[0][0] === idx1
-      && Math.abs(idx2 - selectedLetters[0][1]) === 1
-    ) {
-      return idx1;
-    }
-
-    if (
-      selectedLetters[0][1] === idx2
-      && Math.abs(idx1 - selectedLetters[0][0]) === 1
-    ) {
-      return idx2;
-    }
-
-    return -1;
-  }
-
-  getSimilarIndexLast(idx1: number, idx2: number) {
-    const { selectedLetters } = this.state;
-    const lastIdx = selectedLetters.length - 1;
-
-    if (
-      selectedLetters[lastIdx][0] === idx1
-      && Math.abs(idx2 - selectedLetters[lastIdx][1]) === 1
-    ) {
-      return idx1;
-    }
-
-    if (
-      selectedLetters[lastIdx][1] === idx2
-      && Math.abs(idx1 - selectedLetters[lastIdx][0]) === 1
-    ) {
-      return idx2;
-    }
-
-    return -1;
-  }
-
-  containsIndex(idx1: number, idx2: number) {
-    const { selectedLetters } = this.state;
-    let indexFound = -1;
-
-    selectedLetters.forEach((idxs, i) => {
-      if (idxs[0] === idx1 && idxs[1] === idx2) {
-        indexFound = i;
-      }
-    });
-
-    return indexFound;
-  }
-
   onLetterClick(idx1: number, idx2: number) {
     const { selectedLetters, similarIdx } = this.state;
     const { mode } = this.props;
 
-    const index = this.containsIndex(idx1, idx2);
+    const index = containsIndex(selectedLetters, idx1, idx2);
 
     if (index !== -1) {
       if (index + 1 === selectedLetters.length) {
@@ -121,7 +68,7 @@ class Board extends Component<Props, State> {
     if (selectedLetters.length === 0) {
       selectedLetters.push([idx1, idx2]);
     } else if (similarIdx === -1) {
-      const curSimilarIndex = this.getSimilarIndexLast(idx1, idx2);
+      const curSimilarIndex = getSimilarIndexLast(selectedLetters, idx1, idx2);
 
       if (curSimilarIndex === -1) {
         alert('Error: You can only select horizontally or vertically adjacent letters');
@@ -131,8 +78,8 @@ class Board extends Component<Props, State> {
       selectedLetters.push([idx1, idx2]);
       this.setState({similarIdx: curSimilarIndex});
     } else {
-      const curSimilarIndexFirst = this.getSimilarIndexFirst(idx1, idx2);
-      const curSimilarIndexLast = this.getSimilarIndexLast(idx1, idx2);
+      const curSimilarIndexFirst = getSimilarIndexFirst(selectedLetters, idx1, idx2);
+      const curSimilarIndexLast = getSimilarIndexLast(selectedLetters, idx1, idx2);
 
       if (
         similarIdx !== curSimilarIndexFirst
@@ -215,7 +162,7 @@ class Board extends Component<Props, State> {
                   key={idx2}
                   onClick={() => this.onLetterClick(idx1, idx2)}
                   style={
-                    this.containsIndex(idx1, idx2) === -1
+                    containsIndex(selectedLetters, idx1, idx2) === -1
                     ? {}
                     : {boxShadow: '0 0 0 3pt #4286f4'}
                   }
