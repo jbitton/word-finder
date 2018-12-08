@@ -113,7 +113,13 @@ class Game extends Component<Props, State> {
   swapLetters(idx1, idx2) {
     const { letters, swapIdxs } = this.state;
     letters[swapIdxs[0]][swapIdxs[1]] = ALPHABET_BOARD[idx1][idx2];
-    this.setState({ letters: letters, modalVisible: false, mode: 'word'});
+    this.setState({
+      letters: letters,
+      modalVisible: false,
+      mode: 'word',
+      showAlphabetBoard: false,
+      swapIdxs: []
+    });
   }
 
 
