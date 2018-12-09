@@ -14,7 +14,7 @@ const styles = {
     width: '200px',
     position: 'fixed',
     top: '50%',
-    left: '20%',
+    left: '80%',
     transform: 'translate(-50%, -50%)',
   },
   button: {

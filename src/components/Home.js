@@ -38,7 +38,7 @@ type Props = {
 type State = {
   boardSize: number,
   numPlayers: number,
-  numRounds: number,
+  numRounds: number
 }
 
 export default class Home extends Component<Props, State> {
@@ -76,14 +76,18 @@ export default class Home extends Component<Props, State> {
   }
 
   render() {
-    const { boardSize, isBoardSizeSet } = this.state;
+    const { boardSize, numPlayers, numRounds, isBoardSizeSet } = this.state;
     return (
       <div>
         <Layout style={styles.layout}>
           <AppBar />
           <Content style={styles.content}>
             {isBoardSizeSet
-              ? <Game boardSize={boardSize}/>
+              ? <Game
+                  boardSize={boardSize}
+                  numPlayers={numPlayers}
+                  numRounds={numRounds}
+                />
               : <WelcomeCard
                   setBoardSize={this.setBoardSize}
                   setNumPlayers={this.setNumPlayers}

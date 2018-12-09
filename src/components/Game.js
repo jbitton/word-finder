@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import Board from './Board';
+import ScoreTable from './ScoreTable';
 import { performRotation } from '../assets/utils';
 import alphabetBoard from '../assets/data/alphabetBoard.json';
 
 type Props = {
-  boardSize: number
+  boardSize: number,
+  numPlayers: number,
+  numRounds: number
 };
 
 type State = {
@@ -67,11 +70,25 @@ class Game extends Component<Props, State> {
   }
 
   render() {
-    const { boardSize } = this.props;
+    const { boardSize, numRounds } = this.props;
     const { mode } = this.state;
 
     return (
       <div>
+        <ScoreTable
+          players={[
+            {name: 'Joanna', score: 100},
+            {name: 'Zach', score: 25},
+            {name: 'Nick', score: 75},
+            {name: 'Doruk', score: 85},
+            {name: 'Franke', score: 115},
+            {name: 'Dennis', score: 170},
+            {name: 'Alan', score: 250}
+          ]}
+          numRounds={numRounds}
+          roundNumber={20}
+          turnIdx={0}
+        />
         <Board
           boardSize={boardSize}
           fillLetters={this.fillLetters}
