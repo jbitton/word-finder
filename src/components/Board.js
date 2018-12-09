@@ -4,7 +4,11 @@ import Controls from './Controls';
 import letterValues from '../assets/data/letterValues.json';
 import spelling from 'spelling';
 import dictionary from 'spelling/dictionaries/en_US';
-import { containsIndex, getSimilarIndexFirst, getSimilarIndexLast } from '../assets/utils';
+import {
+  containsIndex,
+  handleAddedLetter,
+  handleAlreadyClicked
+} from '../assets/utils';
 import '../assets/css/Board.css';
 
 const words = new spelling(dictionary);
@@ -41,14 +45,7 @@ class Board extends Component<Props, State> {
     const index = containsIndex(selectedLetters, idx1, idx2);
 
     if (index !== -1) {
-      if (index + 1 === selectedLetters.length) {
-        selectedLetters.splice(index, 1);
-      } else if (Math.min(index, selectedLetters.length - index - 1) === index) {
-        selectedLetters.splice(0, index + 1);
-      } else {
-        selectedLetters.splice(index);
-      }
-
+      handleAlreadyClicked(index, selectedLetters);
       if (selectedLetters.length === 0) {
         this.setState({similarIdx: -1});
       }
@@ -56,45 +53,22 @@ class Board extends Component<Props, State> {
       return;
     }
 
-    if ((mode === 'action' || mode === 'swap') && selectedLetters.length === 0) {
+    if (mode !== 'word' && selectedLetters.length === 0) {
       selectedLetters.push([idx1, idx2]);
       this.setState({ selectedLetters });
       return;
-    } else if (mode === 'action' || mode === 'swap') {
+    } else if (mode !== 'word') {
       alert('Error: Cannot select more than one letter');
       return;
     }
 
     if (selectedLetters.length === 0) {
       selectedLetters.push([idx1, idx2]);
-    } else if (similarIdx === -1) {
-      const curSimilarIndex = getSimilarIndexLast(selectedLetters, idx1, idx2);
-
-      if (curSimilarIndex === -1) {
-        alert('Error: You can only select horizontally or vertically adjacent letters');
-        return;
-      }
-
-      selectedLetters.push([idx1, idx2]);
-      this.setState({similarIdx: curSimilarIndex});
     } else {
-      const curSimilarIndexFirst = getSimilarIndexFirst(selectedLetters, idx1, idx2);
-      const curSimilarIndexLast = getSimilarIndexLast(selectedLetters, idx1, idx2);
-
-      if (
-        similarIdx !== curSimilarIndexFirst
-        && similarIdx !== curSimilarIndexLast
-      ) {
-        alert('Error: You can only select horizontally or vertically adjacent letters');
-        return;
-      }
-
-      if (similarIdx === curSimilarIndexFirst) {
-        selectedLetters.unshift([idx1, idx2]);
-      }
-
-      if (similarIdx === curSimilarIndexLast) {
-        selectedLetters.push([idx1, idx2]);
+      const curSimilarIndex =
+        handleAddedLetter(similarIdx, selectedLetters, idx1, idx2);
+      if (curSimilarIndex) {
+        this.setState({similarIdx: curSimilarIndex});
       }
     }
 

@@ -60,7 +60,7 @@ class Game extends Component<Props, State> {
     this.setState({ letters: letters, mode: 'word' });
   }
 
-  swapLetters(currentAction, idx1, idx2) {
+  swapLetters(currentAction: string, idx1: number, idx2: number) {
     const { letters, swapIdxs } = this.state;
     letters[swapIdxs[0]][swapIdxs[1]] = alphabetBoard[idx1][idx2];
     this.setState({ letters: letters, mode: 'word', swapIdxs: [] });

@@ -94,9 +94,63 @@ function getSimilarIndexLast(
   return -1;
 }
 
+function handleAlreadyClicked(
+  index: number,
+  selectedLetters: Array<Array<string>>
+) {
+  if (index + 1 === selectedLetters.length) {
+    selectedLetters.splice(index, 1);
+  } else if (Math.min(index, selectedLetters.length - index - 1) === index) {
+    selectedLetters.splice(0, index + 1);
+  } else {
+    selectedLetters.splice(index);
+  }
+}
+
+function handleAddedLetter(
+  similarIdx: number,
+  selectedLetters: Array<Array<string>>,
+  idx1: number,
+  idx2: number
+) {
+  if (similarIdx === -1) {
+    const curSimilarIndex = getSimilarIndexLast(selectedLetters, idx1, idx2);
+    if (curSimilarIndex === -1) {
+      alert('Error: You can only select horizontally or vertically adjacent letters');
+      return;
+    }
+    selectedLetters.push([idx1, idx2]);
+
+    return curSimilarIndex;
+  }
+
+  const curSimilarIndexFirst = getSimilarIndexFirst(selectedLetters, idx1, idx2);
+  const curSimilarIndexLast = getSimilarIndexLast(selectedLetters, idx1, idx2);
+
+  if (
+    similarIdx !== curSimilarIndexFirst
+    && similarIdx !== curSimilarIndexLast
+  ) {
+    alert('Error: You can only select horizontally or vertically adjacent letters');
+    return;
+  }
+
+  if (similarIdx === curSimilarIndexFirst) {
+    selectedLetters.unshift([idx1, idx2]);
+  }
+
+  if (similarIdx === curSimilarIndexLast) {
+    selectedLetters.push([idx1, idx2]);
+  }
+
+  return null;
+}
+
 export {
   performRotation,
   containsIndex,
   getSimilarIndexFirst,
-  getSimilarIndexLast
+  getSimilarIndexLast,
+  handleAddedLetter,
+  handleAlreadyClicked
 };
