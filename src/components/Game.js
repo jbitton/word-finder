@@ -4,16 +4,25 @@ import ScoreTable from './ScoreTable';
 import { performRotation } from '../assets/utils';
 import alphabetBoard from '../assets/data/alphabetBoard.json';
 
+type Player = {
+  name: string,
+  score: number
+};
+
 type Props = {
   boardSize: number,
   numPlayers: number,
-  numRounds: number
+  numRounds: number,
+  returnToHome: () => void
 };
 
 type State = {
   letters: Array<Array<string>>,
   mode: 'action' | 'swap' | 'word',
-  swapIdxs: Array<number>
+  players: Array<Player>,
+  roundNumber: number,
+  swapIdxs: Array<number>,
+  turnIdx: number
 };
 
 class Game extends Component<Props, State> {
@@ -22,7 +31,12 @@ class Game extends Component<Props, State> {
       [...Array(this.props.boardSize).keys()].map(() => this.generateRandomLetter())
     )),
     mode: 'action',
-    swapIdxs: []
+    players: [...Array(this.props.numPlayers).keys()].map(idx => {
+      return { name: `P${idx}`, score: 0 };
+    }),
+    roundNumber: 1,
+    swapIdxs: [],
+    turnIdx: 0
   }
 
   constructor(props: Props) {
@@ -46,8 +60,37 @@ class Game extends Component<Props, State> {
     this.setState({ letters });
   }
 
-  returnToAction() {
-    this.setState({ mode: 'action' });
+  exit() {
+    const { players } = this.state;
+    let winningPlayer = players[0];
+
+    for (let i = 1; i < players.length; i++) {
+      if (winningPlayer.score < players[i].score) {
+        winningPlayer = players[i];
+      }
+    }
+
+    alert(`Congratulations, ${winningPlayer.name} won with ${winningPlayer.score} points!`);
+    this.props.returnToHome();
+  }
+
+  returnToAction(points: number) {
+    const { numRounds } = this.props;
+    let { turnIdx, roundNumber, players } = this.state;
+    players[turnIdx].score += points;
+    if (turnIdx + 1 === players.length) {
+      turnIdx = 0;
+      roundNumber++;
+    } else {
+      turnIdx++;
+    }
+
+    if (roundNumber > numRounds) {
+      this.exit();
+      return;
+    }
+
+    this.setState({ mode: 'action', turnIdx, roundNumber, players });
   }
 
   performAction(currentAction: string, idx1: number, idx2: number) {
@@ -71,23 +114,15 @@ class Game extends Component<Props, State> {
 
   render() {
     const { boardSize, numRounds } = this.props;
-    const { mode } = this.state;
+    const { mode, players, roundNumber, turnIdx } = this.state;
 
     return (
       <div>
         <ScoreTable
-          players={[
-            {name: 'Joanna', score: 100},
-            {name: 'Zach', score: 25},
-            {name: 'Nick', score: 75},
-            {name: 'Doruk', score: 85},
-            {name: 'Franke', score: 115},
-            {name: 'Dennis', score: 170},
-            {name: 'Alan', score: 250}
-          ]}
+          players={players}
           numRounds={numRounds}
-          roundNumber={20}
-          turnIdx={0}
+          roundNumber={roundNumber}
+          turnIdx={turnIdx}
         />
         <Board
           boardSize={boardSize}

@@ -85,7 +85,7 @@ const Controls = (props: Props) => (
       type="primary"
       icon="fast-forward"
       disabled={props.mode !== 'word'}
-      onClick={() => props.onSkipWord()}
+      onClick={() => props.onSkipWord(0)}
       style={styles.button}
     >
       Skip Word

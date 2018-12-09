@@ -92,7 +92,7 @@ class Board extends Component<Props, State> {
       this.props.fillLetters(selectedLetters);
       this.setState({ selectedLetters: [], similarIdx: -1});
       alert(`Congratulations! You found a ${score} point word`);
-      returnToAction();
+      returnToAction(score);
     } else {
       this.setState({ selectedLetters: [], similarIdx: -1});
       alert('Error: You submitted an invalid word');

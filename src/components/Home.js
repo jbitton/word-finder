@@ -5,8 +5,6 @@ import Game from './Game';
 import AppBar from './AppBar';
 import WelcomeCard from './WelcomeCard';
 
-import type { configStateType } from '../reducers/types';
-
 const { Content, Footer } = Layout;
 
 const styles = {
@@ -22,23 +20,13 @@ const styles = {
   }
 };
 
-type Props = {
-  setNewick: (fileName: string) => void,
-  setPBS: (fileName: string) => void,
-  setGeneToGo: (fileName: string) => void,
-  setGoAnnotation: (fileName: string) => void,
-  setSpecies: (fileName: string) => void,
-  setGeneInfo: (fileName: string) => void,
-  setProteinAlignments: (fileName: string) => void,
-  setTermType: (termType: string) => void,
-  setMeasureType: (measureType: string) => void,
-  config: configStateType
-};
+type Props = {};
 
 type State = {
   boardSize: number,
   numPlayers: number,
-  numRounds: number
+  numRounds: number,
+  areVarsSet: boolean
 }
 
 export default class Home extends Component<Props, State> {
@@ -48,7 +36,7 @@ export default class Home extends Component<Props, State> {
     boardSize: 4,
     numPlayers: 2,
     numRounds: 5,
-    isBoardSizeSet: false,
+    areVarsSet: false,
   }
 
   constructor() {
@@ -56,7 +44,8 @@ export default class Home extends Component<Props, State> {
     this.setBoardSize = this.setBoardSize.bind(this);
     this.setNumPlayers = this.setNumPlayers.bind(this);
     this.setNumRounds = this.setNumRounds.bind(this);
-    this.onSizeSubmit = this.onSizeSubmit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.returnToHome = this.returnToHome.bind(this);
   }
 
   setBoardSize(boardSize: number) {
@@ -71,28 +60,38 @@ export default class Home extends Component<Props, State> {
     this.setState({ numRounds });
   }
 
-  onSizeSubmit() {
-    this.setState({ isBoardSizeSet: true });
+  onSubmit() {
+    this.setState({ areVarsSet: true });
+  }
+
+  returnToHome() {
+    this.setState({
+      boardSize: 4,
+      numPlayers: 2,
+      numRounds: 5,
+      areVarsSet: false
+    });
   }
 
   render() {
-    const { boardSize, numPlayers, numRounds, isBoardSizeSet } = this.state;
+    const { boardSize, numPlayers, numRounds, areVarsSet } = this.state;
     return (
       <div>
         <Layout style={styles.layout}>
           <AppBar />
           <Content style={styles.content}>
-            {isBoardSizeSet
+            {areVarsSet
               ? <Game
                   boardSize={boardSize}
                   numPlayers={numPlayers}
                   numRounds={numRounds}
+                  returnToHome={this.returnToHome}
                 />
               : <WelcomeCard
                   setBoardSize={this.setBoardSize}
                   setNumPlayers={this.setNumPlayers}
                   setNumRounds={this.setNumRounds}
-                  onSizeSubmit={this.onSizeSubmit}
+                  onSizeSubmit={this.onSubmit}
                 />}
           </Content>
           <Footer style={styles.footer}>
