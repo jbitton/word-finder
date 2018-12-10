@@ -10,3 +10,5 @@ $ yarn start
 ```
 
 To build the application, run `yarn build`.
+
+**NOTE**: For those of you running the clean React app, ignore the index.php file. That's for a class project.
