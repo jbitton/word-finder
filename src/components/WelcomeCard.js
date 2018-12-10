@@ -15,6 +15,7 @@ type Props = {
 const styles = {
   card: {
     width: '30%',
+    minWidth: '353px',
     position: 'fixed',
     top: '50%',
     left: '50%',
