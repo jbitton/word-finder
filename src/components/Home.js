@@ -106,7 +106,7 @@ export default class Home extends Component<Props, State> {
                 />}
           </Content>
           <Footer style={styles.footer}>
-            Word Finder ©2018 Created by Joanna Bitton
+            Word Finder ©2018 Created by Joanna Bitton (and some random s*** by Zach Tanenbaum)
           </Footer>
         </Layout>
       </div>
