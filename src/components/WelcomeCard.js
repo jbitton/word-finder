@@ -1,10 +1,14 @@
 import React from 'react';
-import { Button, Card, Divider, InputNumber } from 'antd';
+import { Button, Card, Divider, InputNumber, Radio } from 'antd';
+
+const RadioGroup = Radio.Group;
 
 type Props = {
+  addBot: boolean,
   setBoardSize: (boardSize: number) => void,
   setNumPlayers: (numPlayers: number) => void,
   setNumRounds: (numRounds: number) => void,
+  onBotChange: (event: Event) => void,
   onSizeSubmit: () => void
 };
 
@@ -54,6 +58,11 @@ const WelcomeCard = (props: Props) => (
       onChange={props.setNumRounds}
       style={styles.input}
     />
+    <Divider orientation="left">Add a Bot to Play Against?</Divider>
+    <RadioGroup onChange={props.onBotChange} value={props.addBot}>
+      <Radio value={true}>Yes</Radio>
+      <Radio value={false}>No</Radio>
+    </RadioGroup>
   </Card>
 );
 

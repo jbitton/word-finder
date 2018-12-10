@@ -26,6 +26,7 @@ type State = {
   boardSize: number,
   numPlayers: number,
   numRounds: number,
+  addBot: boolean,
   areVarsSet: boolean
 }
 
@@ -36,6 +37,7 @@ export default class Home extends Component<Props, State> {
     boardSize: 4,
     numPlayers: 2,
     numRounds: 5,
+    addBot: true,
     areVarsSet: false,
   }
 
@@ -46,6 +48,7 @@ export default class Home extends Component<Props, State> {
     this.setNumRounds = this.setNumRounds.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.returnToHome = this.returnToHome.bind(this);
+    this.onBotChange = this.onBotChange.bind(this);
   }
 
   setBoardSize(boardSize: number) {
@@ -64,17 +67,22 @@ export default class Home extends Component<Props, State> {
     this.setState({ areVarsSet: true });
   }
 
+  onBotChange(event: Event) {
+    this.setState({ addBot: event.target.value });
+  }
+
   returnToHome() {
     this.setState({
       boardSize: 4,
       numPlayers: 2,
       numRounds: 5,
+      addBot: true,
       areVarsSet: false
     });
   }
 
   render() {
-    const { boardSize, numPlayers, numRounds, areVarsSet } = this.state;
+    const { boardSize, numPlayers, numRounds, addBot, areVarsSet } = this.state;
     return (
       <div>
         <Layout style={styles.layout}>
@@ -88,10 +96,12 @@ export default class Home extends Component<Props, State> {
                   returnToHome={this.returnToHome}
                 />
               : <WelcomeCard
+                  addBot={addBot}
                   setBoardSize={this.setBoardSize}
                   setNumPlayers={this.setNumPlayers}
                   setNumRounds={this.setNumRounds}
                   onSizeSubmit={this.onSubmit}
+                  onBotChange={this.onBotChange}
                 />}
           </Content>
           <Footer style={styles.footer}>
