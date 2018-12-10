@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Board from './Board';
 import ScoreTable from './ScoreTable';
 import { getLetterFrequency, performRotation } from '../assets/utils';
+import { DoubleAgent } from '../assets/agents';
+import letterValues from '../assets/data/letterValues.json';
 import alphabetBoard from '../assets/data/alphabetBoard.json';
 
 type Player = {
@@ -10,6 +12,7 @@ type Player = {
 };
 
 type Props = {
+  addBot: boolean,
   boardSize: number,
   numPlayers: number,
   numRounds: number,
@@ -33,7 +36,7 @@ class Game extends Component<Props, State> {
     mode: 'action',
     players: [...Array(this.props.numPlayers).keys()].map(idx => {
       return { name: `P${idx}`, score: 0 };
-    }),
+    }).concat(this.props.addBot ? [{ name: 'Bot', score: 0 }] : []),
     roundNumber: 1,
     swapIdxs: [],
     turnIdx: 0
@@ -74,11 +77,41 @@ class Game extends Component<Props, State> {
     this.props.returnToHome();
   }
 
+  botMove() {
+    const { boardSize } = this.props;
+    const { letters } = this.state;
+    const agent = new DoubleAgent();
+    const move = agent.getMove(letters);
+    const word = move.word
+      ? letters[move.word[0][0]][move.word[0][1]]
+        + letters[move.word[1][0]][move.word[1][1]]
+      : null;
+
+    if (move.action === 'swap') {
+      letters[move.idx1][move.idx2] = move.swap;
+    } else {
+      performRotation(move.action, move.idx1, move.idx2, letters, boardSize);
+    }
+    this.setState({ letters });
+
+    let score = 0;
+    move.word.forEach(idxs => score += letterValues[letters[idxs[0]][idxs[1]]]);
+    this.fillLetters(move.word);
+    return {word, score};
+  }
+
   returnToAction(points: number) {
     const { numRounds } = this.props;
     let { turnIdx, roundNumber, players } = this.state;
+    let results = null;
     players[turnIdx].score += points;
+
     if (turnIdx + 1 === players.length) {
+      turnIdx = 0;
+      roundNumber++;
+    } else if (players[turnIdx + 1].name === 'Bot') {
+      results = this.botMove();
+      players[turnIdx + 1].score += results.score;
       turnIdx = 0;
       roundNumber++;
     } else {
@@ -91,6 +124,11 @@ class Game extends Component<Props, State> {
     }
 
     this.setState({ mode: 'action', turnIdx, roundNumber, players });
+    if (results !== null && results.word !== null) {
+      alert(`Bot found word ${results.word} for ${results.score} points`);
+    } else if (results !== null) {
+      alert(`Bot skipped word submission`);
+    }
   }
 
   performAction(currentAction: string, idx1: number, idx2: number) {

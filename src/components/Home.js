@@ -90,6 +90,7 @@ export default class Home extends Component<Props, State> {
           <Content style={styles.content}>
             {areVarsSet
               ? <Game
+                  addBot={addBot}
                   boardSize={boardSize}
                   numPlayers={numPlayers}
                   numRounds={numRounds}
