@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Board from './Board';
 import ScoreTable from './ScoreTable';
-import { performRotation } from '../assets/utils';
+import { getLetterFrequency, performRotation } from '../assets/utils';
 import alphabetBoard from '../assets/data/alphabetBoard.json';
 
 type Player = {
@@ -48,7 +48,7 @@ class Game extends Component<Props, State> {
   }
 
   generateRandomLetter() {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const alphabet = getLetterFrequency();
     return alphabet[Math.floor(Math.random() * alphabet.length)]
   }
 

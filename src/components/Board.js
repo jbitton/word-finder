@@ -125,7 +125,10 @@ class Board extends Component<Props, State> {
         <Controls
           mode={mode}
           performAction={this.performAction}
-          onSkipWord={this.props.returnToAction}
+          onSkipWord={() => {
+            this.setState({selectedLetters: [], similarIdx: -1})
+            this.props.returnToAction(0)
+          }}
         />
         <div className="box">
           {letters.map((row, idx1) => (

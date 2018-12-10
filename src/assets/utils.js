@@ -1,3 +1,34 @@
+function getLetterFrequency() {
+  return (
+    'E'.repeat(12) +
+    'T'.repeat(9) +
+    'A'.repeat(8) +
+    'O'.repeat(8) +
+    'I'.repeat(7) +
+    'N'.repeat(7) +
+    'S'.repeat(6) +
+    'R'.repeat(6) +
+    'H'.repeat(6) +
+    'D'.repeat(4) +
+    'L'.repeat(4) +
+    'U'.repeat(3) +
+    'C'.repeat(3) +
+    'M'.repeat(3) +
+    'F'.repeat(2) +
+    'Y'.repeat(2) +
+    'W'.repeat(2) +
+    'G'.repeat(2) +
+    'P'.repeat(2) +
+    'B'.repeat(2) +
+    'V' +
+    'K' +
+    'X' +
+    'Q' +
+    'J' +
+    'Z'
+  );
+}
+
 function performRotation(
   currentAction: string,
   idx1: number,
@@ -147,6 +178,7 @@ function handleAddedLetter(
 }
 
 export {
+  getLetterFrequency,
   performRotation,
   containsIndex,
   getSimilarIndexFirst,
